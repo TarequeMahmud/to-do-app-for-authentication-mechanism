@@ -12,6 +12,7 @@ var SQLiteStore = require("connect-sqlite3")(session);
 
 var indexRouter = require("./routes/index");
 var authRouter = require("./routes/auth");
+
 var app = express();
 
 app.locals.pluralize = require("pluralize");

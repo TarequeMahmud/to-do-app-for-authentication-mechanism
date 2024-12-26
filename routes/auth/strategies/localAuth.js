@@ -1,9 +1,9 @@
 var express = require("express");
-var express = require("express");
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
 var crypto = require("crypto");
-var db = require("../db");
+var db = require("../../../db");
+var router = express.Router();
 
 passport.use(
   new LocalStrategy(function verify(username, password, cb) {
@@ -55,63 +55,12 @@ passport.deserializeUser(function (user, cb) {
   });
 });
 
-var router = express.Router();
-
-router.get("/login", function (req, res, next) {
-  res.render("login");
-});
 router.post(
-  "/login/password",
+  "/",
   passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/login",
   })
 );
-
-router.post("/logout", (req, res, next) => {
-  req.logout((err) => {
-    if (err) return next(err);
-    res.redirect("/");
-  });
-});
-
-router.get("/signup", function (req, res, next) {
-  res.render("signup");
-});
-
-router.post("/signup", function (req, res, next) {
-  var salt = crypto.randomBytes(16);
-  crypto.pbkdf2(
-    req.body.password,
-    salt,
-    310000,
-    32,
-    "sha256",
-    function (err, hashedPassword) {
-      if (err) {
-        return next(err);
-      }
-      db.run(
-        "INSERT INTO users (username, hashed_password, salt) VALUES (?, ?, ?)",
-        [req.body.username, hashedPassword, salt],
-        function (err) {
-          if (err) {
-            return next(err);
-          }
-          var user = {
-            id: this.lastID,
-            username: req.body.username,
-          };
-          req.login(user, function (err) {
-            if (err) {
-              return next(err);
-            }
-            res.redirect("/");
-          });
-        }
-      );
-    }
-  );
-});
 
 module.exports = router;
