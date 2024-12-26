@@ -4,6 +4,7 @@ var localAuth = require("./strategies/localAuth");
 var googleAuth = require("./strategies/googleAuth");
 var crypto = require("crypto");
 var db = require("../../db");
+const passport = require("passport");
 
 router.get("/login", function (req, res, next) {
   res.render("login");
@@ -11,7 +12,13 @@ router.get("/login", function (req, res, next) {
 
 router.use("/login/password", localAuth);
 router.use("/login/federated/google", googleAuth);
-
+router.get(
+  "/oauth2/redirect/google",
+  passport.authenticate("google", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+  })
+);
 router.post("/logout", (req, res, next) => {
   req.logout((err) => {
     if (err) return next(err);
