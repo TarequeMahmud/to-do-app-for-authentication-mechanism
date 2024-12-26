@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var localAuth = require("./strategies/localAuth");
+var googleAuth = require("./strategies/googleAuth");
 var crypto = require("crypto");
 var db = require("../../db");
 
@@ -9,6 +10,7 @@ router.get("/login", function (req, res, next) {
 });
 
 router.use("/login/password", localAuth);
+router.use("/login/federated/google", googleAuth);
 
 router.post("/logout", (req, res, next) => {
   req.logout((err) => {

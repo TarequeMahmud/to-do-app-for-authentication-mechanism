@@ -43,6 +43,7 @@
     "morgan": "~1.9.1",
     "nodemon": "^3.1.9",
     "passport": "^0.7.0",
+    "passport-google-oidc": "^0.1.0",
     "passport-local": "^1.0.0",
     "pluralize": "^8.0.0",
     "sqlite3": "^5.0.2"
