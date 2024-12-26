@@ -16,6 +16,7 @@ passport.use(
     },
     function verify(issuer, profile, callback) {
       //check if the profile is saved in database
+      var id = this.lastID;
       db.get(
         "SELECT * FROM federated_credentials WHERE provider=? AND subject=?",
         [issuer, profile.id],
